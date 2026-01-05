@@ -61,10 +61,6 @@ export const ListingDetails = () => {
       setError(language === 'pl' ? 'Wybierz poprawne daty' : 'Please select valid dates');
       return;
     }
-    if (nights > 20) {
-      setError(language === 'pl' ? 'Maksymalnie 20 nocy' : 'Maximum 20 nights');
-      return;
-    }
     setIsChecking(true);
     setTimeout(() => {
       setIsChecking(false);
@@ -98,7 +94,7 @@ export const ListingDetails = () => {
         setError(data.error || 'Server error');
       }
     } catch (err) {
-      setError('Connection failed');
+      setError('Connection failed. Please check backend.');
     } finally {
       setIsProcessing(false);
     }
@@ -133,6 +129,28 @@ export const ListingDetails = () => {
               <span>🚿 ${apartment.baths} ${t('detail.baths')}</span>
             </div>
             <p className="text-gray-700 leading-relaxed text-lg mb-12">${description}</p>
+
+            <!-- Reviews Section -->
+            <div className="mt-12 pt-12 border-t border-gray-200">
+              <h3 className="text-2xl font-bold mb-8 text-gray-900">${t('reviews.title')}</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-10">
+                ${apartment.reviewsList.map(review => html`
+                  <div key=${review.id} className="space-y-4">
+                    <div className="flex items-center gap-3">
+                      <img src=${review.avatar} className="w-12 h-12 rounded-full border border-gray-100 shadow-sm" alt=${review.author} />
+                      <div>
+                        <div className="font-bold text-gray-900 text-sm">${review.author}</div>
+                        <div className="text-[10px] text-gray-400 font-medium uppercase tracking-wider">${review.date}</div>
+                      </div>
+                    </div>
+                    <div className="flex text-yellow-400 text-xs gap-0.5">
+                      ${[...Array(5)].map((_, i) => html`<span key=${i}>${i < Math.floor(review.rating) ? '★' : '☆'}</span>`)}
+                    </div>
+                    <p className="text-gray-600 text-sm leading-relaxed italic">"${review.text}"</p>
+                  </div>
+                `)}
+              </div>
+            </div>
           </div>
 
           <div className="relative">
@@ -207,7 +225,7 @@ export const ListingDetails = () => {
                          <span className="font-bold">BLIK</span>
                       </div>
                     </div>
-                    ${error && html`<div className="mb-4 p-3 bg-red-50 text-red-600 text-xs rounded-lg">${error}</div>`}
+                    ${error && html`<div className="mb-4 p-3 bg-red-50 text-red-600 text-xs rounded-lg border border-red-100">${error}</div>`}
                     <${Button} onClick=${handleConfirmPayment} fullWidth disabled=${isProcessing} className="py-4">
                       ${isProcessing ? t('pay.processing') : t('pay.confirm')}
                     <//>
@@ -219,7 +237,7 @@ export const ListingDetails = () => {
                   <div className="text-center py-8">
                     <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">✓</div>
                     <h3 className="text-xl font-bold mb-2">${t('success.title')}</h3>
-                    <${Link} to="/" className="block w-full bg-indigo-600 text-white py-4 rounded-xl font-bold mt-8">${t('success.back')}<//>
+                    <${Link} to="/" className="block w-full bg-indigo-600 text-white py-4 rounded-xl font-bold mt-8 shadow-lg shadow-indigo-100">${t('success.back')}<//>
                   </div>
                 `}
              </div>
