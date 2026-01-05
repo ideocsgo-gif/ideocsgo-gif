@@ -33,7 +33,6 @@ export const ListingDetails = () => {
     const found = APARTMENTS.find((a) => a.id === id);
     if (found) {
       setApartment(found);
-      setFormData(prev => ({ ...prev, guests: 1 }));
     }
     setLoading(false);
   }, [id]);
@@ -41,6 +40,7 @@ export const ListingDetails = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+    setError(null);
   };
 
   const calculateNights = () => {
@@ -52,33 +52,20 @@ export const ListingDetails = () => {
     return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   };
 
-  const validateBooking = () => {
-    const nights = calculateNights();
-    
-    if (formData.checkIn && formData.checkOut) {
-      const start = new Date(formData.checkIn);
-      const end = new Date(formData.checkOut);
-      if (end <= start) {
-        setError(language === 'pl' ? 'Data wyjazdu musi być po dacie przyjazdu' : 'Check-out must be after check-in');
-        return false;
-      }
-      if (nights > 20) {
-        setError(language === 'pl' ? 'Maksymalna długość pobytu to 20 dni' : 'Maximum stay is 20 days');
-        return false;
-      }
-    }
-
-    return true;
-  };
+  const nights = calculateNights();
+  const totalPrice = apartment ? nights * apartment.pricePerNight : 0;
 
   const handleCheckAvailability = (e) => {
     e.preventDefault();
-    setError(null);
-    
-    if (!validateBooking()) return;
-
+    if (nights <= 0) {
+      setError(language === 'pl' ? 'Wybierz poprawne daty' : 'Please select valid dates');
+      return;
+    }
+    if (nights > 20) {
+      setError(language === 'pl' ? 'Maksymalnie 20 nocy' : 'Maximum 20 nights');
+      return;
+    }
     setIsChecking(true);
-    // 1 second artificial delay as requested
     setTimeout(() => {
       setIsChecking(false);
       setBookingStep('payment');
@@ -90,8 +77,6 @@ export const ListingDetails = () => {
     setIsProcessing(true);
     setError(null);
     
-    const nights = calculateNights();
-    const totalPrice = nights * (apartment.pricePerNight || 0);
     const title = language === 'pl' ? apartment.title_pl || apartment.title : apartment.title;
     
     try {
@@ -125,14 +110,7 @@ export const ListingDetails = () => {
   const title = language === 'pl' ? apartment.title_pl || apartment.title : apartment.title;
   const description = language === 'pl' ? apartment.description_pl || apartment.description : apartment.description;
   const location = language === 'pl' ? apartment.location_pl || apartment.location : apartment.location;
-
-  const displayReviews = (apartment.reviewsList || []).slice(0, 3);
-  
   const today = new Date().toISOString().split('T')[0];
-  const maxGuests = Math.max(7, apartment.guests || 0);
-
-  const nights = calculateNights();
-  const totalPrice = nights * (apartment.pricePerNight || 0);
 
   return html`
     <div className="pb-24">
@@ -155,27 +133,6 @@ export const ListingDetails = () => {
               <span>🚿 ${apartment.baths} ${t('detail.baths')}</span>
             </div>
             <p className="text-gray-700 leading-relaxed text-lg mb-12">${description}</p>
-
-            <div className="border-t pt-8">
-              <h3 className="text-2xl font-bold mb-6">${t('reviews.title')}</h3>
-              <div className="space-y-6">
-                ${displayReviews.map(review => html`
-                  <div key=${review.id} className="border-b border-gray-100 pb-6">
-                    <div className="flex items-center gap-3 mb-2">
-                      <img src=${review.avatar} className="w-10 h-10 rounded-full bg-gray-200" alt=${review.author} />
-                      <div>
-                        <div className="font-bold text-sm">${review.author}</div>
-                        <div className="text-xs text-gray-400">${review.date}</div>
-                      </div>
-                      <div className="ml-auto flex items-center text-amber-500 font-bold text-xs">
-                        ★ ${review.rating.toFixed(1)}
-                      </div>
-                    </div>
-                    <p className="text-gray-600 text-sm italic">"${review.text}"</p>
-                  </div>
-                `)}
-              </div>
-            </div>
           </div>
 
           <div className="relative">
@@ -190,7 +147,7 @@ export const ListingDetails = () => {
                       ${nights > 0 && html`
                         <div className="text-right">
                           <div className="text-indigo-600 font-bold text-xl">${totalPrice} zl</div>
-                          <div className="text-gray-400 text-[10px] uppercase font-bold">${nights} ${t('book.nights')} ${t('book.total')}</div>
+                          <div className="text-gray-400 text-[10px] uppercase font-bold">${nights} ${t('book.nights')}</div>
                         </div>
                       `}
                     </div>
@@ -210,7 +167,7 @@ export const ListingDetails = () => {
                       <div className="space-y-1">
                         <label className="text-[10px] font-bold text-gray-400 uppercase">${t('book.guests')}</label>
                         <select name="guests" value=${formData.guests} onChange=${handleInputChange} className="w-full border p-2 rounded-lg text-sm bg-white">
-                          ${[...Array(maxGuests)].map((_, i) => html`<option key=${i + 1} value=${i + 1}>${i + 1} ${t('detail.guests')}</option>`)}
+                          ${[...Array(Math.max(7, apartment.guests))].map((_, i) => html`<option key=${i + 1} value=${i + 1}>${i + 1} ${t('detail.guests')}</option>`)}
                         </select>
                       </div>
 
@@ -234,7 +191,6 @@ export const ListingDetails = () => {
                 ${bookingStep === 'payment' && html`
                   <div>
                     <h3 className="font-bold text-xl mb-6">${t('pay.title')}</h3>
-                    
                     <div className="bg-gray-50 p-4 rounded-xl mb-6 space-y-2">
                        <div className="flex justify-between text-sm">
                           <span className="text-gray-600">${apartment.pricePerNight} zl x ${nights} ${t('book.nights')}</span>
@@ -245,7 +201,6 @@ export const ListingDetails = () => {
                           <span>${totalPrice} zl</span>
                        </div>
                     </div>
-
                     <div className="w-full flex items-center justify-between p-4 border-2 border-indigo-600 bg-indigo-50 rounded-xl mb-6">
                       <div className="flex items-center gap-3">
                          <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/Blik_logo.svg" className="h-4" alt="blik" />
