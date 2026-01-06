@@ -131,7 +131,10 @@ export const ListingDetails = () => {
   const description = language === 'pl' ? apartment.description_pl || apartment.description : apartment.description;
   const location = language === 'pl' ? apartment.location_pl || apartment.location : apartment.location;
   const today = new Date().toISOString().split('T')[0];
-  const hiddenImagesCount = Math.max(0, apartment.images.length - 5);
+  
+  // Calculate hidden images for both views
+  const hiddenImagesCountDesktop = Math.max(0, apartment.images.length - 5);
+  const hiddenImagesCountMobile = Math.max(0, apartment.images.length - 3);
 
   const renderStars = (rating) => {
     const stars = Math.floor(rating);
@@ -174,18 +177,24 @@ export const ListingDetails = () => {
             </div>
             <h1 className="text-2xl font-bold text-gray-900">${title}</h1>
             <div className="flex items-center gap-2 text-sm text-booking-action mt-2 font-semibold">
-               <span className="text-gray-900">📍</span>
-               <span className="underline cursor-pointer">${location}</span>
+               <a 
+                 href="https://maps.app.goo.gl/AdxCwshY1phauhuN6" 
+                 target="_blank" 
+                 rel="noopener noreferrer" 
+                 className="flex items-center gap-1 hover:text-[#003580] transition-colors group"
+               >
+                 <span className="text-gray-900 group-hover:text-[#003580]">📍</span>
+                 <span className="underline cursor-pointer">${location}</span>
+               </a>
                <span className="text-gray-400 font-normal">• Excellent location</span>
             </div>
           </div>
           <div className="flex gap-4">
-             <button className="text-booking-action text-2xl font-light">♡</button>
              <${Link} to="/" className="bg-booking-action text-white px-6 py-2 rounded font-bold text-sm hover:bg-[#0052ad]">${t('detail.close')}<//>
           </div>
         </div>
 
-        <div className="grid grid-cols-4 grid-rows-2 gap-2 h-[450px] mb-8 overflow-hidden rounded-lg">
+        <div className="grid grid-cols-3 md:grid-cols-4 grid-rows-2 gap-2 h-[250px] md:h-[450px] mb-8 overflow-hidden rounded-lg">
            <div className="col-span-2 row-span-2 relative">
               <img 
                 src=${apartment.images[0]} 
@@ -193,6 +202,7 @@ export const ListingDetails = () => {
                 onClick=${() => setActivePhotoIndex(0)}
               />
            </div>
+           
            <div className="col-span-1 row-span-1">
               <img 
                 src=${apartment.images[1] || apartment.images[0]} 
@@ -200,32 +210,43 @@ export const ListingDetails = () => {
                 onClick=${() => setActivePhotoIndex(1)}
               />
            </div>
-           <div className="col-span-1 row-span-1">
+
+           <div className="col-span-1 row-span-1 relative">
               <img 
                 src=${apartment.images[2] || apartment.images[0]} 
                 className="w-full h-full object-cover cursor-pointer hover:opacity-95 transition-opacity" 
                 onClick=${() => setActivePhotoIndex(2)}
               />
+              ${hiddenImagesCountMobile > 0 && html`
+                <div 
+                  className="absolute inset-0 bg-black/40 flex md:hidden items-center justify-center text-white font-bold text-sm cursor-pointer hover:bg-black/50 transition-colors"
+                  onClick=${() => setActivePhotoIndex(2)}
+                >
+                  +${hiddenImagesCountMobile}
+                </div>
+              `}
            </div>
-           <div className="col-span-1 row-span-1">
+
+           <div className="hidden md:block col-span-1 row-span-1">
               <img 
                 src=${apartment.images[3] || apartment.images[0]} 
                 className="w-full h-full object-cover cursor-pointer hover:opacity-95 transition-opacity" 
                 onClick=${() => setActivePhotoIndex(3)}
               />
            </div>
-           <div className="col-span-1 row-span-1 relative">
+
+           <div className="hidden md:block col-span-1 row-span-1 relative">
               <img 
                 src=${apartment.images[4] || apartment.images[0]} 
                 className="w-full h-full object-cover cursor-pointer hover:opacity-95 transition-opacity" 
                 onClick=${() => setActivePhotoIndex(4)}
               />
-              ${hiddenImagesCount > 0 && html`
+              ${hiddenImagesCountDesktop > 0 && html`
                 <div 
                   className="absolute inset-0 bg-black/40 flex items-center justify-center text-white font-bold text-sm cursor-pointer hover:bg-black/50 transition-colors"
                   onClick=${() => setActivePhotoIndex(4)}
                 >
-                  + ${hiddenImagesCount} more
+                  + ${hiddenImagesCountDesktop} more
                 </div>
               `}
            </div>
