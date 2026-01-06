@@ -8,42 +8,38 @@ export const ListingCard = ({ apartment }) => {
   const { language, t } = useLanguage();
   
   const title = language === 'pl' ? apartment.title_pl || apartment.title : apartment.title;
-  const description = language === 'pl' ? apartment.description_pl || apartment.description : apartment.description;
   const location = language === 'pl' ? apartment.location_pl || apartment.location : apartment.location;
 
   return html`
-    <div className="group bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden border border-gray-100 flex flex-col h-full">
+    <div className="bg-white border border-gray-200 rounded-lg flex flex-col overflow-hidden hover:border-gray-300 transition-colors">
       <div className="relative aspect-[4/3] overflow-hidden">
         <img 
           src=${apartment.images[0]} 
           alt=${title} 
-          className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
+          className="w-full h-full object-cover"
         />
-        <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-md text-xs font-bold text-gray-800 shadow-sm">
-          ★ ${apartment.rating}
+        <div className="absolute top-2 right-2 bg-booking-blue text-white font-bold text-xs px-1.5 py-1 rounded-t-md rounded-br-md">
+          ${apartment.rating.toFixed(1)}
         </div>
       </div>
       
       <div className="p-4 flex flex-col flex-grow">
-        <div className="text-xs font-semibold text-indigo-600 uppercase tracking-wide mb-1">
+        <div className="flex justify-between items-start gap-2 mb-1">
+          <${Link} to=${`/listing/${apartment.id}`} className="text-booking-action font-bold text-lg hover:underline decoration-1 leading-snug">
+            ${title}
+          <//>
+        </div>
+
+        <div className="text-xs text-booking-action underline mb-3 cursor-pointer">
           ${location}
         </div>
-        <h3 className="text-lg font-bold text-gray-900 leading-tight mb-2 line-clamp-2">
-          ${title}
-        </h3>
-        <p className="text-gray-500 text-sm line-clamp-2 mb-4 flex-grow">
-          ${description}
-        </p>
         
-        <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-100">
-          <div>
-            <span className="text-lg font-bold text-gray-900">$${apartment.pricePerNight}</span>
-            <span className="text-gray-500 text-sm"> ${t('card.night')}</span>
-          </div>
-          <${Link} to=${`/listing/${apartment.id}`}>
-            <button className="text-sm font-medium text-indigo-600 hover:text-indigo-800 transition-colors">
-              ${t('card.view')}
-            </button>
+        <div className="mt-auto pt-4 flex flex-col items-end border-t border-gray-100">
+          <div className="text-[10px] text-gray-500">Price for 1 night</div>
+          <div className="text-xl font-bold leading-tight">PLN ${apartment.pricePerNight}</div>
+          <div className="text-[10px] text-gray-500 mb-3">Includes taxes and fees</div>
+          <${Link} to=${`/listing/${apartment.id}`} className="bg-booking-action text-white px-4 py-2 rounded-md font-bold text-sm w-full text-center hover:bg-[#0052ad]">
+            ${t('card.view')}
           <//>
         </div>
       </div>

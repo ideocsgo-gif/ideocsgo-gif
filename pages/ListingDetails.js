@@ -28,6 +28,9 @@ export const ListingDetails = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState(null);
 
+  // Lightbox State
+  const [activePhotoIndex, setActivePhotoIndex] = useState(null);
+
   useEffect(() => {
     window.scrollTo(0, 0);
     const found = APARTMENTS.find((a) => a.id === id);
@@ -53,15 +56,22 @@ export const ListingDetails = () => {
   };
 
   const nights = calculateNights();
-  const totalPrice = apartment ? nights * apartment.pricePerNight : 0;
+  const totalPrice = apartment ? (nights || 1) * apartment.pricePerNight : 0;
 
   const handleCheckAvailability = (e) => {
     e.preventDefault();
-    if (nights <= 0) {
-      setError(language === 'pl' ? 'Wybierz poprawne daty' : 'Please select valid dates');
+    if (!formData.checkIn || !formData.checkOut) {
+      setError(language === 'pl' ? 'Wybierz daty' : 'Please select dates');
       return;
     }
+    // Basic validation
+    if (!formData.firstName || !formData.lastName || !formData.email || !formData.phone) {
+       setError(language === 'pl' ? 'Wypełnij wszystkie pola' : 'Please fill in all fields');
+       return;
+    }
+
     setIsChecking(true);
+    // Simulate a check delay
     setTimeout(() => {
       setIsChecking(false);
       setBookingStep('payment');
@@ -83,8 +93,8 @@ export const ListingDetails = () => {
           ...formData,
           apartmentTitle: title,
           paymentMethod: 'blik',
-          totalPrice: `${totalPrice} zl`,
-          nights: nights
+          totalPrice: `PLN ${totalPrice}`,
+          nights: nights || 1
         }),
       });
       const data = await response.json();
@@ -94,59 +104,157 @@ export const ListingDetails = () => {
         setError(data.error || 'Server error');
       }
     } catch (err) {
-      setError('Connection failed. Please check backend.');
+      setError('Connection failed. Please try again.');
     } finally {
       setIsProcessing(false);
     }
   };
 
-  if (loading) return html`<div className="min-h-screen flex items-center justify-center">${t('loading')}</div>`;
-  if (!apartment) return html`<div className="min-h-screen flex flex-col items-center justify-center"><h2>${t('notFound')}</h2></div>`;
+  const nextPhoto = (e) => {
+    e.stopPropagation();
+    setActivePhotoIndex((prev) => (prev + 1) % apartment.images.length);
+  };
+
+  const prevPhoto = (e) => {
+    e.stopPropagation();
+    setActivePhotoIndex((prev) => (prev - 1 + apartment.images.length) % apartment.images.length);
+  };
+
+  const closeLightbox = () => {
+    setActivePhotoIndex(null);
+  };
+
+  if (loading) return html`<div className="min-h-screen flex items-center justify-center font-bold text-gray-500">${t('loading')}</div>`;
+  if (!apartment) return html`<div className="min-h-screen flex flex-col items-center justify-center font-bold text-gray-500"><h2>${t('notFound')}</h2></div>`;
 
   const title = language === 'pl' ? apartment.title_pl || apartment.title : apartment.title;
   const description = language === 'pl' ? apartment.description_pl || apartment.description : apartment.description;
   const location = language === 'pl' ? apartment.location_pl || apartment.location : apartment.location;
   const today = new Date().toISOString().split('T')[0];
 
+  const renderStars = (rating) => {
+    const stars = Math.floor(rating);
+    return html`<span className="text-booking-yellow text-xs">${'★'.repeat(stars)}${'☆'.repeat(5 - stars)}</span>`;
+  };
+
   return html`
-    <div className="pb-24">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="flex items-center justify-between mb-4">
-          <h1 className="text-2xl font-extrabold text-gray-900">${title}</h1>
-          <${Link} to="/" className="text-gray-600 hover:text-gray-900">${t('detail.close')}<//>
-        </div>
+    <div className="pb-20 bg-white">
+      
+      ${activePhotoIndex !== null && html`
+        <div className="fixed inset-0 z-[100] bg-black/90 flex items-center justify-center select-none" onClick=${closeLightbox}>
+          <button className="absolute top-6 right-6 text-white text-4xl font-light hover:text-gray-300 transition-colors" onClick=${closeLightbox}>×</button>
+          
+          <button className="absolute left-6 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white w-12 h-12 rounded-full flex items-center justify-center transition-colors" onClick=${prevPhoto}>
+            <span className="text-2xl">❮</span>
+          </button>
+          
+          <img 
+            src=${apartment.images[activePhotoIndex]} 
+            className="max-h-[85vh] max-w-[90vw] object-contain shadow-2xl" 
+            onClick=${(e) => e.stopPropagation()} 
+          />
+          
+          <button className="absolute right-6 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white w-12 h-12 rounded-full flex items-center justify-center transition-colors" onClick=${nextPhoto}>
+            <span className="text-2xl">❯</span>
+          </button>
 
-        <div className="relative h-[40vh] rounded-2xl overflow-hidden mb-8 shadow-inner">
-           <img src=${apartment.images[0]} className="w-full h-full object-cover" alt=${title} />
+          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/70 text-sm font-medium">
+            ${activePhotoIndex + 1} / ${apartment.images.length}
+          </div>
         </div>
+      `}
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-          <div className="md:col-span-2">
-            <h2 className="text-xl font-bold mb-4 text-indigo-900">${location}</h2>
-            <div className="flex gap-4 mb-6 text-sm text-gray-600 font-medium">
-              <span>👥 ${apartment.guests} ${t('detail.guests')}</span>
-              <span>🛏️ ${apartment.beds} ${t('detail.beds')}</span>
-              <span>🚿 ${apartment.baths} ${t('detail.baths')}</span>
+      <div className="max-w-6xl mx-auto px-4 pt-6">
+        <div className="flex flex-col md:flex-row justify-between items-start gap-4 mb-6">
+          <div>
+            <div className="flex items-center gap-2 mb-1">
+               <span className="bg-gray-400 text-white text-[10px] font-bold px-1 rounded-sm uppercase tracking-tighter">Apartment</span>
+               <div className="flex text-booking-yellow text-xs font-bold">★★★★★</div>
             </div>
-            <p className="text-gray-700 leading-relaxed text-lg mb-12">${description}</p>
+            <h1 className="text-2xl font-bold text-gray-900">${title}</h1>
+            <div className="flex items-center gap-2 text-sm text-booking-action mt-2 font-semibold">
+               <span className="text-gray-900">📍</span>
+               <span className="underline cursor-pointer">${location}</span>
+               <span className="text-gray-400 font-normal">• Excellent location</span>
+            </div>
+          </div>
+          <div className="flex gap-4">
+             <button className="text-booking-action text-2xl font-light">♡</button>
+             <${Link} to="/" className="bg-booking-action text-white px-6 py-2 rounded font-bold text-sm hover:bg-[#0052ad]">${t('detail.close')}<//>
+          </div>
+        </div>
 
-            <!-- Reviews Section -->
-            <div className="mt-12 pt-12 border-t border-gray-200">
-              <h3 className="text-2xl font-bold mb-8 text-gray-900">${t('reviews.title')}</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-10">
-                ${apartment.reviewsList.map(review => html`
-                  <div key=${review.id} className="space-y-4">
-                    <div className="flex items-center gap-3">
-                      <img src=${review.avatar} className="w-12 h-12 rounded-full border border-gray-100 shadow-sm" alt=${review.author} />
+        <div className="grid grid-cols-4 grid-rows-2 gap-2 h-[450px] mb-8 overflow-hidden rounded-lg">
+           <div className="col-span-2 row-span-2 relative">
+              <img 
+                src=${apartment.images[0]} 
+                className="w-full h-full object-cover cursor-pointer hover:opacity-95 transition-opacity" 
+                onClick=${() => setActivePhotoIndex(0)}
+              />
+           </div>
+           <div className="col-span-1 row-span-1">
+              <img 
+                src=${apartment.images[1] || apartment.images[0]} 
+                className="w-full h-full object-cover cursor-pointer hover:opacity-95 transition-opacity" 
+                onClick=${() => setActivePhotoIndex(1)}
+              />
+           </div>
+           <div className="col-span-1 row-span-1">
+              <img 
+                src=${apartment.images[2] || apartment.images[0]} 
+                className="w-full h-full object-cover cursor-pointer hover:opacity-95 transition-opacity" 
+                onClick=${() => setActivePhotoIndex(2)}
+              />
+           </div>
+           <div className="col-span-1 row-span-1">
+              <img 
+                src=${apartment.images[3] || apartment.images[0]} 
+                className="w-full h-full object-cover cursor-pointer hover:opacity-95 transition-opacity" 
+                onClick=${() => setActivePhotoIndex(3)}
+              />
+           </div>
+           <div className="col-span-1 row-span-1 relative">
+              <img 
+                src=${apartment.images[4] || apartment.images[0]} 
+                className="w-full h-full object-cover cursor-pointer hover:opacity-95 transition-opacity" 
+                onClick=${() => setActivePhotoIndex(4)}
+              />
+              <div 
+                className="absolute inset-0 bg-black/40 flex items-center justify-center text-white font-bold text-sm cursor-pointer"
+                onClick=${() => setActivePhotoIndex(4)}
+              >
+                + more
+              </div>
+           </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="lg:col-span-2">
+            <h3 className="text-xl font-bold mb-6 text-gray-900">Description</h3>
+            <p className="text-[#1a1a1a] leading-relaxed mb-10 text-[15px] font-medium opacity-90">${description}</p>
+            
+            <div className="border-t border-gray-200 pt-10">
+              <div className="flex items-center gap-3 mb-8">
+                <div className="bg-booking-blue text-white font-bold px-2 py-1 rounded-t-md rounded-br-md text-lg">
+                  ${apartment.rating.toFixed(1)}
+                </div>
+                <div className="font-bold text-gray-900 text-lg">${t('reviews.title')}</div>
+              </div>
+
+              <div className="space-y-8">
+                ${apartment.reviewsList.slice(0, 3).map(review => html`
+                  <div key=${review.id} className="border-b border-gray-100 pb-8">
+                    <div className="flex items-center gap-3 mb-2">
+                      <img src=${review.avatar} className="w-9 h-9 rounded-full border border-gray-200" alt=${review.author} />
                       <div>
-                        <div className="font-bold text-gray-900 text-sm">${review.author}</div>
-                        <div className="text-[10px] text-gray-400 font-medium uppercase tracking-wider">${review.date}</div>
+                        <div className="font-bold text-sm text-gray-900">${review.author}</div>
+                        <div className="flex items-center gap-2">
+                           ${renderStars(review.rating)}
+                           <span className="text-[10px] text-gray-400 font-bold uppercase">${review.date}</span>
+                        </div>
                       </div>
                     </div>
-                    <div className="flex text-yellow-400 text-xs gap-0.5">
-                      ${[...Array(5)].map((_, i) => html`<span key=${i}>${i < Math.floor(review.rating) ? '★' : '☆'}</span>`)}
-                    </div>
-                    <p className="text-gray-600 text-sm leading-relaxed italic">"${review.text}"</p>
+                    <p className="text-sm italic text-gray-700 font-medium leading-relaxed mt-2">"${review.text}"</p>
                   </div>
                 `)}
               </div>
@@ -154,90 +262,90 @@ export const ListingDetails = () => {
           </div>
 
           <div className="relative">
-             <div className="sticky top-24 bg-white p-6 rounded-2xl shadow-xl border border-gray-100">
+             <div className="sticky top-20 bg-[#ebf3ff] p-6 rounded border border-gray-200 shadow-sm">
                 ${bookingStep === 'form' && html`
                   <form onSubmit=${handleCheckAvailability}>
-                    <div className="flex justify-between items-baseline mb-6">
-                      <div className="flex flex-col">
-                        <span className="text-3xl font-bold">${apartment.pricePerNight} zl</span>
-                        <span className="text-gray-500 text-xs">${t('book.price')}</span>
-                      </div>
-                      ${nights > 0 && html`
-                        <div className="text-right">
-                          <div className="text-indigo-600 font-bold text-xl">${totalPrice} zl</div>
-                          <div className="text-gray-400 text-[10px] uppercase font-bold">${nights} ${t('book.nights')}</div>
-                        </div>
-                      `}
-                    </div>
+                    <h3 className="font-bold text-lg mb-6 text-gray-900">Reserve your stay</h3>
 
-                    <div className="space-y-4">
-                      <div className="grid grid-cols-2 gap-2">
-                        <div className="space-y-1">
-                          <label className="text-[10px] font-bold text-gray-400 uppercase">${t('book.checkIn')}</label>
-                          <input type="date" name="checkIn" required min=${today} value=${formData.checkIn} onChange=${handleInputChange} className="w-full border p-2 rounded-lg text-xs" />
-                        </div>
-                        <div className="space-y-1">
-                          <label className="text-[10px] font-bold text-gray-400 uppercase">${t('book.checkOut')}</label>
-                          <input type="date" name="checkOut" required min=${formData.checkIn || today} value=${formData.checkOut} onChange=${handleInputChange} className="w-full border p-2 rounded-lg text-xs" />
-                        </div>
+                    <div className="space-y-3">
+                      <div className="bg-white p-3 rounded border border-gray-300">
+                         <label className="block text-[10px] font-extrabold text-gray-500 uppercase mb-1">${t('book.checkIn')}</label>
+                         <input type="date" name="checkIn" required min=${today} value=${formData.checkIn} onChange=${handleInputChange} className="w-full outline-none text-sm font-bold text-gray-800" />
                       </div>
-                      
-                      <div className="space-y-1">
-                        <label className="text-[10px] font-bold text-gray-400 uppercase">${t('book.guests')}</label>
-                        <select name="guests" value=${formData.guests} onChange=${handleInputChange} className="w-full border p-2 rounded-lg text-sm bg-white">
-                          ${[...Array(Math.max(7, apartment.guests))].map((_, i) => html`<option key=${i + 1} value=${i + 1}>${i + 1} ${t('detail.guests')}</option>`)}
+                      <div className="bg-white p-3 rounded border border-gray-300">
+                         <label className="block text-[10px] font-extrabold text-gray-500 uppercase mb-1">${t('book.checkOut')}</label>
+                         <input type="date" name="checkOut" required min=${formData.checkIn || today} value=${formData.checkOut} onChange=${handleInputChange} className="w-full outline-none text-sm font-bold text-gray-800" />
+                      </div>
+                      <div className="bg-white p-3 rounded border border-gray-300">
+                        <label className="block text-[10px] font-extrabold text-gray-500 uppercase mb-1">${t('book.guests')}</label>
+                        <select name="guests" value=${formData.guests} onChange=${handleInputChange} className="w-full outline-none bg-white text-sm font-bold text-gray-800">
+                          ${[...Array(Math.max(7, apartment.guests))].map((_, i) => html`<option key=${i + 1} value=${i + 1}>${i + 1} adults</option>`)}
                         </select>
                       </div>
 
-                      <div className="grid grid-cols-2 gap-2">
-                        <input type="text" name="firstName" placeholder=${t('book.firstName')} required value=${formData.firstName} onChange=${handleInputChange} className="w-full border p-3 rounded-xl text-sm" />
-                        <input type="text" name="lastName" placeholder=${t('book.lastName')} required value=${formData.lastName} onChange=${handleInputChange} className="w-full border p-3 rounded-xl text-sm" />
+                      <div className="grid grid-cols-2 gap-2 mt-4">
+                        <input type="text" name="firstName" placeholder=${t('book.firstName')} required value=${formData.firstName} onChange=${handleInputChange} className="w-full border border-gray-300 p-3 rounded text-sm font-semibold outline-booking-action" />
+                        <input type="text" name="lastName" placeholder=${t('book.lastName')} required value=${formData.lastName} onChange=${handleInputChange} className="w-full border border-gray-300 p-3 rounded text-sm font-semibold outline-booking-action" />
                       </div>
-                      
-                      <input type="tel" name="phone" placeholder=${t('book.phone')} required value=${formData.phone} onChange=${handleInputChange} className="w-full border p-3 rounded-xl text-sm" />
-                      <input type="email" name="email" placeholder=${t('book.email')} required value=${formData.email} onChange=${handleInputChange} className="w-full border p-3 rounded-xl text-sm" />
-                      
-                      ${error && html`<div className="p-2 text-red-500 text-xs font-medium">${error}</div>`}
+                      <input type="tel" name="phone" placeholder=${t('book.phone')} required value=${formData.phone} onChange=${handleInputChange} className="w-full border border-gray-300 p-3 rounded text-sm font-semibold outline-booking-action" />
+                      <input type="email" name="email" placeholder=${t('book.email')} required value=${formData.email} onChange=${handleInputChange} className="w-full border border-gray-300 p-3 rounded text-sm font-semibold outline-booking-action" />
 
-                      <${Button} type="submit" fullWidth disabled=${isChecking} className="py-4 shadow-lg shadow-indigo-100">
-                        ${isChecking ? t('book.checking') : t('book.reserve')}
-                      <//>
+                      ${error && html`
+                        <div className="bg-red-50 text-red-600 p-2 text-xs rounded mt-2 border border-red-100 font-bold">
+                          ${error}
+                        </div>
+                      `}
+
+                      <div className="pt-6 border-t border-gray-300 mt-6">
+                        <div className="text-3xl font-bold mb-1 text-gray-900">PLN ${totalPrice || apartment.pricePerNight}</div>
+                        <div className="text-[10px] text-gray-500 mb-6 font-bold uppercase tracking-wider">
+                          ${nights > 1 
+                            ? (language === 'pl' ? `za ${nights} nocy` : `for ${nights} nights`) 
+                            : t('book.price')}
+                        </div>
+                        
+                        <${Button} type="submit" fullWidth disabled=${isChecking} className="py-3 bg-booking-action text-white hover:bg-[#0052ad] font-bold rounded-md text-base">
+                          ${isChecking ? t('book.checking') : t('book.reserve')}
+                        <//>
+                      </div>
                     </div>
                   </form>
                 `}
                 
                 ${bookingStep === 'payment' && html`
                   <div>
-                    <h3 className="font-bold text-xl mb-6">${t('pay.title')}</h3>
-                    <div className="bg-gray-50 p-4 rounded-xl mb-6 space-y-2">
-                       <div className="flex justify-between text-sm">
-                          <span className="text-gray-600">${apartment.pricePerNight} zl x ${nights} ${t('book.nights')}</span>
-                          <span className="font-bold">${totalPrice} zl</span>
+                    <h3 className="font-bold text-lg mb-6 text-gray-900">${t('pay.title')}</h3>
+                    <div className="bg-white p-4 rounded border border-gray-300 mb-6">
+                       <div className="flex justify-between text-sm font-bold text-gray-900 mb-2">
+                          <span className="text-gray-500">Guest</span>
+                          <span>${formData.firstName} ${formData.lastName}</span>
                        </div>
-                       <div className="border-t pt-2 flex justify-between font-bold text-lg">
-                          <span>${t('book.total')}</span>
-                          <span>${totalPrice} zl</span>
+                       <div className="flex justify-between text-sm font-bold text-gray-900">
+                          <span className="text-gray-500">${t('book.total')}</span>
+                          <span>PLN ${totalPrice}</span>
                        </div>
                     </div>
-                    <div className="w-full flex items-center justify-between p-4 border-2 border-indigo-600 bg-indigo-50 rounded-xl mb-6">
-                      <div className="flex items-center gap-3">
-                         <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/Blik_logo.svg" className="h-4" alt="blik" />
-                         <span className="font-bold">BLIK</span>
-                      </div>
+                    
+                    <div className="flex items-center justify-between p-4 border border-booking-action bg-white rounded mb-6">
+                       <div className="flex items-center gap-3">
+                         <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/Blik_logo.svg" className="h-4" />
+                         <span className="font-bold text-sm text-gray-900">BLIK</span>
+                       </div>
                     </div>
-                    ${error && html`<div className="mb-4 p-3 bg-red-50 text-red-600 text-xs rounded-lg border border-red-100">${error}</div>`}
-                    <${Button} onClick=${handleConfirmPayment} fullWidth disabled=${isProcessing} className="py-4">
+
+                    <${Button} onClick=${handleConfirmPayment} fullWidth disabled=${isProcessing} className="py-3 bg-booking-action text-white font-bold rounded-md">
                       ${isProcessing ? t('pay.processing') : t('pay.confirm')}
                     <//>
-                    <button onClick=${() => setBookingStep('form')} className="mt-4 text-sm text-gray-500 w-full text-center hover:underline">← ${t('pay.back')}</button>
+                    <button onClick=${() => setBookingStep('form')} className="mt-4 text-xs text-booking-action w-full text-center hover:underline font-bold">← ${t('pay.back')}</button>
                   </div>
                 `}
 
                 ${bookingStep === 'success' && html`
                   <div className="text-center py-8">
-                    <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">✓</div>
-                    <h3 className="text-xl font-bold mb-2">${t('success.title')}</h3>
-                    <${Link} to="/" className="block w-full bg-indigo-600 text-white py-4 rounded-xl font-bold mt-8 shadow-lg shadow-indigo-100">${t('success.back')}<//>
+                    <div className="w-16 h-16 bg-booking-success text-white rounded-full flex items-center justify-center mx-auto mb-6 text-2xl font-bold shadow-lg">✓</div>
+                    <h3 className="text-xl font-bold mb-2 text-gray-900">${t('success.title')}</h3>
+                    <p className="text-xs text-gray-600 mb-8 font-medium leading-relaxed">${t('success.msg')}</p>
+                    <${Link} to="/" className="block w-full bg-booking-action text-white py-3 rounded-md font-bold text-sm hover:bg-[#0052ad]">Return Home<//>
                   </div>
                 `}
              </div>

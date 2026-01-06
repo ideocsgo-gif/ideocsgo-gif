@@ -12,31 +12,29 @@ export const Layout = ({ children }) => {
   };
 
   return html`
-    <div className="min-h-screen flex flex-col bg-gray-50">
-      <header className="bg-white shadow-sm sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <${Link} to="/" className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-bold text-xl">
-                U
-              </div>
-              <span className="font-bold text-xl text-gray-900 tracking-tight">UrbanStay</span>
-            <//>
-            <nav className="flex items-center gap-4">
-              <button 
-                onClick=${toggleLanguage}
-                className="px-2 py-1 border border-gray-300 rounded text-sm font-medium hover:bg-gray-100 transition-colors"
-              >
-                ${language === 'en' ? 'PL' : 'EN'}
-              </button>
-              <${Link} to="/" className="text-gray-600 hover:text-indigo-600 font-medium transition-colors">
+    <div className="min-h-screen flex flex-col">
+      <header className="bg-booking-blue text-white sticky top-0 z-50">
+        <div className="max-w-6xl mx-auto px-4 h-16 flex justify-between items-center">
+          <${Link} to="/" className="text-2xl font-bold tracking-tight">
+            StayInWarsaw<span className="text-booking-yellow">.pl</span>
+          <//>
+          
+          <nav className="flex items-center gap-6">
+            <button 
+              onClick=${toggleLanguage}
+              className="w-8 h-8 flex items-center justify-center border border-white/30 rounded-full text-xs font-bold hover:bg-white/10 transition-colors"
+            >
+              ${language === 'en' ? 'PL' : 'EN'}
+            </button>
+            <div className="hidden sm:flex items-center gap-6 text-sm font-semibold">
+              <${Link} to="/" className="hover:bg-white/10 px-3 py-2 rounded transition-colors">
                 ${t('nav.homes')}
               <//>
-              <button className="text-gray-600 hover:text-indigo-600 font-medium transition-colors">
+              <button className="border border-white px-4 py-1.5 rounded hover:bg-white/10 transition-colors">
                 ${t('nav.login')}
               </button>
-            </nav>
-          </div>
+            </div>
+          </nav>
         </div>
       </header>
 
@@ -44,32 +42,23 @@ export const Layout = ({ children }) => {
         ${children}
       </main>
 
-      <footer className="bg-gray-900 text-white py-12 mt-auto">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div>
-              <h3 className="text-lg font-bold mb-4">UrbanStay</h3>
-              <p className="text-gray-400 text-sm">${t('footer.about')}</p>
+      <footer className="bg-white border-t border-gray-200 pt-10 pb-8">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-xs text-booking-action mb-8">
+            <ul className="space-y-2">
+              <li className="font-bold text-gray-900">${t('footer.help')}</li>
+              <li><a href="#" className="hover:underline">Customer Service</a></li>
+              <li><a href="#" className="hover:underline">Safety Resource</a></li>
+            </ul>
+            <ul className="space-y-2">
+              <li className="font-bold text-gray-900">Partner</li>
+              <li><a href="#" className="hover:underline">List your property</a></li>
+              <li><a href="#" className="hover:underline">Partner help</a></li>
+            </ul>
+            <div className="md:col-span-2 text-right text-gray-500">
+               <p className="mb-2">StayInWarsaw.pl is part of Urban Holdings Inc.</p>
+               <p>© ${new Date().getFullYear()} ${t('footer.rights')}</p>
             </div>
-            <div>
-              <h3 className="text-lg font-bold mb-4">Support</h3>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li><a href="#" className="hover:text-white">${t('footer.help')}</a></li>
-                <li><a href="#" className="hover:text-white">${t('footer.cancel')}</a></li>
-                <li><a href="#" className="hover:text-white">${t('footer.safety')}</a></li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-lg font-bold mb-4">${t('footer.contact')}</h3>
-              <p className="text-gray-400 text-sm">
-                123 Market Street<br />
-                San Francisco, CA 94103<br />
-                hello@urbanstay.com
-              </p>
-            </div>
-          </div>
-          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-500 text-sm">
-            &copy; ${new Date().getFullYear()} ${t('footer.rights')}
           </div>
         </div>
       </footer>
