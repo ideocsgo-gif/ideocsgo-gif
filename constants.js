@@ -47,6 +47,34 @@ export const APARTMENTS = [
       'Family-friendly layout',
       'Close to public transport, shops, restaurants, and services'
     ],
+    // Using relative paths for GitHub Pages support
+    images: [
+      './images/1/1.jpg',
+      './images/1/2.jpg',
+      './images/1/3.jpg',
+      './images/1/4.jpg',
+      './images/1/5.jpg',
+      './images/1/6.jpg'
+    ],
+    beds: 2,
+    baths: 1,
+    guests: 4,
+    reviewsList: generateReviews(5)
+  }
+];
+    amenities: [
+      'Prime location in Warsaw city center',
+      'Fully equipped modern kitchen with built-in appliances',
+      'Spacious and bright living area',
+      'Comfortable bedrooms with ample storage',
+      'Stylish bathroom with walk-in shower',
+      'High-quality furniture and finishes',
+      'Large windows with excellent natural light',
+      'Hardwood floors',
+      'Modern lighting throughout',
+      'Family-friendly layout',
+      'Close to public transport, shops, restaurants, and services'
+    ],
     // UPDATED: Using relative paths for GitHub Pages support
     images: [
       './images/1/1.jpg',
