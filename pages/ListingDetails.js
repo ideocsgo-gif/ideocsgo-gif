@@ -131,6 +131,7 @@ export const ListingDetails = () => {
   const description = language === 'pl' ? apartment.description_pl || apartment.description : apartment.description;
   const location = language === 'pl' ? apartment.location_pl || apartment.location : apartment.location;
   const today = new Date().toISOString().split('T')[0];
+  const hiddenImagesCount = Math.max(0, apartment.images.length - 5);
 
   const renderStars = (rating) => {
     const stars = Math.floor(rating);
@@ -219,12 +220,14 @@ export const ListingDetails = () => {
                 className="w-full h-full object-cover cursor-pointer hover:opacity-95 transition-opacity" 
                 onClick=${() => setActivePhotoIndex(4)}
               />
-              <div 
-                className="absolute inset-0 bg-black/40 flex items-center justify-center text-white font-bold text-sm cursor-pointer"
-                onClick=${() => setActivePhotoIndex(4)}
-              >
-                + more
-              </div>
+              ${hiddenImagesCount > 0 && html`
+                <div 
+                  className="absolute inset-0 bg-black/40 flex items-center justify-center text-white font-bold text-sm cursor-pointer hover:bg-black/50 transition-colors"
+                  onClick=${() => setActivePhotoIndex(4)}
+                >
+                  + ${hiddenImagesCount} more
+                </div>
+              `}
            </div>
         </div>
 
@@ -233,6 +236,18 @@ export const ListingDetails = () => {
             <h3 className="text-xl font-bold mb-6 text-gray-900">Description</h3>
             <p className="text-[#1a1a1a] leading-relaxed mb-10 text-[15px] font-medium opacity-90">${description}</p>
             
+            ${apartment.amenities && apartment.amenities.length > 0 && html`
+              <h3 className="text-xl font-bold mb-6 text-gray-900">Facilities & Amenities</h3>
+              <ul className="grid grid-cols-1 gap-y-3 mb-10">
+                ${apartment.amenities.map(item => html`
+                  <li className="flex items-start gap-3 text-[#1a1a1a] text-[15px] font-medium opacity-90">
+                    <span className="text-booking-action font-bold">✓</span>
+                    ${item}
+                  </li>
+                `)}
+              </ul>
+            `}
+
             <div className="border-t border-gray-200 pt-10">
               <div className="flex items-center gap-3 mb-8">
                 <div className="bg-booking-blue text-white font-bold px-2 py-1 rounded-t-md rounded-br-md text-lg">

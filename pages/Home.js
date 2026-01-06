@@ -14,7 +14,7 @@ export const Home = () => {
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-bold text-gray-900">${t('featured.title')}</h2>
           <div className="text-sm font-medium text-gray-500">
-            5 ${t('featured.badge')} found in Warsaw
+            ${APARTMENTS.length} ${t('featured.badge')} found in Warsaw
           </div>
         </div>
 

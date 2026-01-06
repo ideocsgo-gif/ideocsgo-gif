@@ -16,129 +16,48 @@ const generateReviews = (count) => {
     // Generates either 4 or 5 stars
     rating: Math.random() > 0.4 ? 5 : 4,
     text: texts[i % texts.length],
-    avatar: `https://i.pravatar.cc/150?u=${i}`
+    avatar: '' // Avatars removed from UI
   }));
 };
 
 export const APARTMENTS = [
   {
     id: '1',
-    title: 'Modern Downtown Loft with City Views',
-    title_pl: 'Nowoczesny Loft w Centrum z Widokiem',
-    location: 'Downtown District',
-    location_pl: 'Centrum',
+    title: 'Elegant, Modern Apartment in the Heart of Warsaw City Center',
+    title_pl: 'Elegancki, Nowoczesny Apartament w Sercu Warszawy',
+    location: 'Warsaw City Center',
+    location_pl: 'Śródmieście, Warszawa',
     pricePerNight: 145,
     rating: 4.8,
     reviews: 124,
-    description: 'Experience the heartbeat of the city in this stunning modern loft.',
-    description_pl: 'Poczuj rytm miasta в tym oszałamiającym nowoczesnym lofcie.',
-    amenities: ['Wifi', 'Air conditioning', 'Kitchen'],
-    images: [
-      'https://picsum.photos/seed/apt1-main/1200/800',
-      'https://picsum.photos/seed/apt1-2/1200/800',
-      'https://picsum.photos/seed/apt1-3/1200/800',
-      'https://picsum.photos/seed/apt1-4/1200/800',
-      'https://picsum.photos/seed/apt1-5/1200/800'
+    description: 'Discover this stylish and thoughtfully designed apartment located in the very center of Warsaw. The interiors feature a bright, modern aesthetic with high-quality finishes, spacious bedrooms, a contemporary bathroom, and an open-plan kitchen fully equipped with modern appliances. Large windows provide excellent natural light, creating a calm and comfortable living atmosphere. Ideal for professionals, families, or as an investment property, this apartment offers both comfort and prime city-center convenience, with shops, restaurants, and public transport just steps away.',
+    description_pl: 'Odkryj ten stylowy i przemyślany apartament położony w samym centrum Warszawy. Wnętrza charakteryzują się jasną, nowoczesną estetyką, wysokiej jakości wykończeniem, przestronnymi sypialniami, nowoczesną łazienką oraz otwartą kuchnią w pełni wyposażoną w nowoczesny sprzęt. Duże okna zapewniają doskonałe doświetlenie, tworząc spokojną i komfortową atmosferę. Idealny dla profesjonalistów, rodzin lub jako inwestycja, ten apartament oferuje zarówno komfort, jak i wygodę centrum miasta, ze sklepami, restauracjami i komunikacją miejską zaledwie kilka kroków od obiektu.',
+    amenities: [
+      'Prime location in Warsaw city center',
+      'Fully equipped modern kitchen with built-in appliances',
+      'Spacious and bright living area',
+      'Comfortable bedrooms with ample storage',
+      'Stylish bathroom with walk-in shower',
+      'High-quality furniture and finishes',
+      'Large windows with excellent natural light',
+      'Hardwood floors',
+      'Modern lighting throughout',
+      'Family-friendly layout',
+      'Close to public transport, shops, restaurants, and services'
     ],
-    beds: 1,
-    baths: 1,
-    guests: 2,
-    reviewsList: generateReviews(5)
-  },
-  {
-    id: '2',
-    title: 'Cozy Garden Studio in Historic Neighborhood',
-    title_pl: 'Przytulne Studio z Ogrodem na Starym Mieście',
-    location: 'Old Town',
-    location_pl: 'Stare Miasto',
-    pricePerNight: 85,
-    rating: 4.9,
-    reviews: 89,
-    description: 'Escape the noise in this serene garden studio.',
-    description_pl: 'Ucieknij od hałasu в tym spokojnym studio z ogrodem.',
-    amenities: ['Garden View', 'Patio'],
+    // Images now point to a local "images" folder.
+    // Structure: /images/{id}/{number}.jpg
     images: [
-      'https://picsum.photos/seed/apt2-garden/1200/800',
-      'https://picsum.photos/seed/apt2-2/1200/800',
-      'https://picsum.photos/seed/apt2-3/1200/800',
-      'https://picsum.photos/seed/apt2-4/1200/800',
-      'https://picsum.photos/seed/apt2-5/1200/800'
-    ],
-    beds: 1,
-    baths: 1,
-    guests: 2,
-    reviewsList: generateReviews(5)
-  },
-  {
-    id: '3',
-    title: 'Luxury Family Suite with Kids\' Paradise',
-    title_pl: 'Luksusowy Apartament Rodzinny',
-    location: 'Coastal District',
-    location_pl: 'Dzielnica Nadmorska',
-    pricePerNight: 245,
-    rating: 4.9,
-    reviews: 56,
-    description: 'The ultimate family getaway destination.',
-    description_pl: 'Ostateczny cel rodzinnych wakacji.',
-    amenities: ['Bunk Beds', 'Gourmet Kitchen'],
-    images: [
-      'https://images.unsplash.com/photo-1616486029423-aaa478965c97?q=80&w=1200',
-      'https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?q=80&w=1200',
-      'https://images.unsplash.com/photo-1556912173-3db996ea8c3f?q=80&w=1200',
-      'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?q=80&w=1200',
-      'https://images.unsplash.com/photo-1604709177225-055f99402ea3?q=80&w=1200'
-    ],
-    beds: 4,
-    baths: 2,
-    guests: 6,
-    reviewsList: generateReviews(5)
-  },
-  {
-    id: '4',
-    title: 'Minimalist Penthouse Suite',
-    title_pl: 'Minimalistyczny Penthouse',
-    location: 'Financial District',
-    location_pl: 'Dzielnica Finansowa',
-    pricePerNight: 350,
-    rating: 5.0,
-    reviews: 32,
-    description: 'Luxury defined.',
-    description_pl: 'Definicja luksusu.',
-    amenities: ['Pool', 'Gym'],
-    images: [
-      'https://picsum.photos/seed/apt4-skyline/1200/800',
-      'https://picsum.photos/seed/apt4-2/1200/800',
-      'https://picsum.photos/seed/apt4-3/1200/800',
-      'https://picsum.photos/seed/apt4-4/1200/800',
-      'https://picsum.photos/seed/apt4-5/1200/800'
+      '/images/1/1.jpg',
+      '/images/1/2.jpg',
+      '/images/1/3.jpg',
+      '/images/1/4.jpg',
+      '/images/1/5.jpg',
+      '/images/1/6.jpg'
     ],
     beds: 2,
-    baths: 2,
+    baths: 1,
     guests: 4,
     reviewsList: generateReviews(5)
-  },
-  {
-    id: '5',
-    title: 'Artsy Boho Apartment',
-    title_pl: 'Artystyczny Apartament Boho',
-    location: 'Arts District',
-    location_pl: 'Dzielnica Artystyczna',
-    pricePerNight: 110,
-    rating: 4.6,
-    reviews: 210,
-    description: 'Immerse yourself in creativity.',
-    description_pl: 'Zanurz się в kreatywności.',
-    amenities: ['Wifi', 'Record Player'],
-    images: [
-      'https://picsum.photos/seed/apt5-art/1200/800',
-      'https://picsum.photos/seed/apt5-2/1200/800',
-      'https://picsum.photos/seed/apt5-3/1200/800',
-      'https://picsum.photos/seed/apt5-4/1200/800',
-      'https://picsum.photos/seed/apt5-5/1200/800'
-    ],
-    beds: 1,
-    baths: 1,
-    guests: 2,
-    reviewsList: generateReviews(5)
-  },
+  }
 ];
