@@ -245,7 +245,6 @@ export const ListingDetails = () => {
                 ${apartment.reviewsList.slice(0, 3).map(review => html`
                   <div key=${review.id} className="border-b border-gray-100 pb-8">
                     <div className="flex items-center gap-3 mb-2">
-                      <img src=${review.avatar} className="w-9 h-9 rounded-full border border-gray-200" alt=${review.author} />
                       <div>
                         <div className="font-bold text-sm text-gray-900">${review.author}</div>
                         <div className="flex items-center gap-2">
