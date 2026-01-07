@@ -195,19 +195,19 @@ export const ListingDetails = () => {
                 <svg className="w-5 h-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M5 20h14M4 16h16v4M4 16V12h16v4M6 7h5v5H6V7zm7 0h5v5h-5V7z" />
                 </svg>
-                <span>2 ${t('detail.bedrooms')}</span>
+                <span>${t('detail.bedrooms')}</span>
               </div>
               <div className="flex items-center gap-2">
                 <svg className="w-5 h-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <span>1 ${t('detail.kidsRoom')}</span>
+                <span>${t('detail.kidsRoom')}</span>
               </div>
               <div className="flex items-center gap-2">
                 <svg className="w-5 h-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M4 14h16v3a3 3 0 01-3 3H7a3 3 0 01-3-3v-3zM6 14V8a2 2 0 012-2h8a2 2 0 012 2v6" />
                 </svg>
-                <span>1 ${t('detail.bathroom')}</span>
+                <span>${t('detail.bathroom')}</span>
               </div>
               <div className="flex items-center gap-2">
                  <svg className="w-5 h-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
