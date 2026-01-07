@@ -189,6 +189,33 @@ export const ListingDetails = () => {
                </a>
                <span className="text-gray-400 font-normal">• ${t('detail.locationExcellent')}</span>
             </div>
+
+            <div className="flex flex-wrap gap-x-6 gap-y-2 mt-4 text-sm text-[#1a1a1a] font-medium border-t border-gray-100 pt-3">
+              <div className="flex items-center gap-2">
+                <svg className="w-5 h-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M5 20h14M4 16h16v4M4 16V12h16v4M6 7h5v5H6V7zm7 0h5v5h-5V7z" />
+                </svg>
+                <span>2 ${t('detail.bedrooms')}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <svg className="w-5 h-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>1 ${t('detail.kidsRoom')}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <svg className="w-5 h-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M4 14h16v3a3 3 0 01-3 3H7a3 3 0 01-3-3v-3zM6 14V8a2 2 0 012-2h8a2 2 0 012 2v6" />
+                </svg>
+                <span>1 ${t('detail.bathroom')}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                 <svg className="w-5 h-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2m-14 0h2" />
+                 </svg>
+                <span>${t('detail.livingRoom')}</span>
+              </div>
+            </div>
           </div>
           <div className="flex gap-4">
              <${Link} to="/" className="bg-booking-action text-white px-6 py-2 rounded font-bold text-sm hover:bg-[#0052ad]">${t('detail.close')}<//>
