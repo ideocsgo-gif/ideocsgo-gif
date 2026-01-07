@@ -93,7 +93,7 @@ export const Layout = ({ children }) => {
             </ul>
             <ul className="space-y-2">
               <li className="font-bold text-gray-900">Partner</li>
-              <li><a href="#" className="hover:underline">List your property</a></li>
+              <li><${Link} to="/list-your-property" className="hover:underline">List your property<//></li>
               <li><a href="#" className="hover:underline">Partner help</a></li>
             </ul>
             <div className="md:col-span-2 text-right text-gray-500">
