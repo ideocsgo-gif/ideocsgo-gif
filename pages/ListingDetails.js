@@ -8,6 +8,10 @@ import { html } from 'htm/react';
 
 const API_BASE_URL = 'https://hrdtkk0-production.up.railway.app'; 
 
+// Payment Method Icons - Change links here to update icons
+const BLIK_ICON_URL = 'https://wbj.pl/cache/images/resize/920-920/5d4c1bab7c328.jpg';
+const BANK_ICON_URL = null; // Set this to a URL string (e.g., 'https://example.com/icon.png') to use an image for Bank Transfer
+
 export const ListingDetails = () => {
   const { id } = useParams();
   const [apartment, setApartment] = useState(null);
@@ -25,6 +29,8 @@ export const ListingDetails = () => {
     checkOut: '',
     guests: 1,
   });
+  // Payment method state: 'blik' or 'transfer'
+  const [paymentMethod, setPaymentMethod] = useState('blik');
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState(null);
 
@@ -84,7 +90,8 @@ export const ListingDetails = () => {
     setError(null);
     
     const title = language === 'pl' ? apartment.title_pl || apartment.title : apartment.title;
-    
+    const paymentLabel = paymentMethod === 'blik' ? 'BLIK' : 'Bank Transfer';
+
     try {
       const response = await fetch(`${API_BASE_URL}/api/book`, {
         method: 'POST',
@@ -92,8 +99,8 @@ export const ListingDetails = () => {
         body: JSON.stringify({
           ...formData,
           apartmentTitle: title,
-          paymentMethod: 'blik',
-          totalPrice: `PLN ${totalPrice}`,
+          paymentMethod: paymentMethod,
+          totalPrice: `PLN ${totalPrice} (${paymentLabel})`,
           nights: nights || 1
         }),
       });
@@ -389,11 +396,36 @@ export const ListingDetails = () => {
                        </div>
                     </div>
                     
-                    <div className="flex items-center justify-between p-4 border border-booking-action bg-white rounded mb-6">
+                    <div 
+                      className=${`flex items-center justify-between p-4 border rounded mb-3 cursor-pointer transition-colors ${paymentMethod === 'blik' ? 'border-booking-action bg-blue-50' : 'border-gray-300 hover:border-gray-400'}`}
+                      onClick=${() => setPaymentMethod('blik')}
+                    >
                        <div className="flex items-center gap-3">
-                         <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/Blik_logo.svg" className="h-4" />
+                         <div className="w-10 h-8 flex items-center justify-center">
+                            <img src=${BLIK_ICON_URL} className="max-h-full max-w-full object-contain" alt="BLIK" />
+                         </div>
                          <span className="font-bold text-sm text-gray-900">BLIK</span>
                        </div>
+                       ${paymentMethod === 'blik' && html`<div className="text-booking-action font-bold">✓</div>`}
+                    </div>
+
+                    <div 
+                      className=${`flex items-center justify-between p-4 border rounded mb-6 cursor-pointer transition-colors ${paymentMethod === 'transfer' ? 'border-booking-action bg-blue-50' : 'border-gray-300 hover:border-gray-400'}`}
+                      onClick=${() => setPaymentMethod('transfer')}
+                    >
+                       <div className="flex items-center gap-3">
+                         <div className="w-10 h-8 flex items-center justify-center">
+                           ${BANK_ICON_URL ? html`
+                             <img src=${BANK_ICON_URL} className="max-h-full max-w-full object-contain" alt="Bank Transfer" />
+                           ` : html`
+                             <svg className="w-6 h-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z" />
+                             </svg>
+                           `}
+                         </div>
+                         <span className="font-bold text-sm text-gray-900">${t('pay.transfer')}</span>
+                       </div>
+                       ${paymentMethod === 'transfer' && html`<div className="text-booking-action font-bold">✓</div>`}
                     </div>
 
                     <${Button} onClick=${handleConfirmPayment} fullWidth disabled=${isProcessing} className="py-3 bg-booking-action text-white font-bold rounded-md">
@@ -407,7 +439,7 @@ export const ListingDetails = () => {
                   <div className="text-center py-8">
                     <div className="w-16 h-16 bg-booking-success text-white rounded-full flex items-center justify-center mx-auto mb-6 text-2xl font-bold shadow-lg">✓</div>
                     <h3 className="text-xl font-bold mb-2 text-gray-900">${t('success.title')}</h3>
-                    <p className="text-xs text-gray-600 mb-8 font-medium leading-relaxed">${t('success.msg')}</p>
+                    <p className="text-xs text-gray-600 mb-8 font-medium leading-relaxed whitespace-pre-line">${t('success.msg')}</p>
                     <${Link} to="/" className="block w-full bg-booking-action text-white py-3 rounded-md font-bold text-sm hover:bg-[#0052ad]">Return Home<//>
                   </div>
                 `}
