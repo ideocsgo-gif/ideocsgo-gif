@@ -88,17 +88,16 @@ export const Layout = ({ children }) => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-xs text-booking-action mb-8">
             <ul className="space-y-2">
               <li className="font-bold text-gray-900">${t('footer.help')}</li>
-              <li><a href="#" className="hover:underline">Customer Service</a></li>
-              <li><a href="#" className="hover:underline">Safety Resource</a></li>
+              <li><${Link} to="/customer-service" className="hover:underline">Customer Service<//></li>
+              <li><${Link} to="/safety-resources" className="hover:underline">Safety Resource<//></li>
             </ul>
             <ul className="space-y-2">
               <li className="font-bold text-gray-900">Partner</li>
               <li><${Link} to="/list-your-property" className="hover:underline">List your property<//></li>
-              <li><a href="#" className="hover:underline">Partner help</a></li>
+              <li><${Link} to="/partner-help" className="hover:underline">Partner help<//></li>
             </ul>
-            <div className="md:col-span-2 text-right text-gray-500">
-               <p className="mb-2">StayInWarsaw.pl is part of Urban Holdings Inc.</p>
-               <p>© ${new Date().getFullYear()} ${t('footer.rights')}</p>
+            <div className="col-span-2 md:col-span-2 text-center md:text-right text-gray-500 flex items-end justify-center md:justify-end">
+               <p className="whitespace-nowrap">© ${new Date().getFullYear()} StayInWarsaw.pl. ${t('footer.rights')}</p>
             </div>
           </div>
         </div>

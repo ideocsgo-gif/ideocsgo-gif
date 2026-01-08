@@ -8,6 +8,9 @@ import { About } from './pages/About.js';
 import { Properties } from './pages/Properties.js';
 import { ListingDetails } from './pages/ListingDetails.js';
 import { ListYourProperty } from './pages/ListYourProperty.js';
+import { PartnerHelp } from './pages/PartnerHelp.js';
+import { CustomerService } from './pages/CustomerService.js';
+import { SafetyResources } from './pages/SafetyResources.js';
 import { LanguageProvider } from './context/LanguageContext.js';
 
 const App = () => {
@@ -21,6 +24,9 @@ const App = () => {
             <${Route} path="/properties" element=${html`<${Properties} />`} />
             <${Route} path="/listing/:id" element=${html`<${ListingDetails} />`} />
             <${Route} path="/list-your-property" element=${html`<${ListYourProperty} />`} />
+            <${Route} path="/partner-help" element=${html`<${PartnerHelp} />`} />
+            <${Route} path="/customer-service" element=${html`<${CustomerService} />`} />
+            <${Route} path="/safety-resources" element=${html`<${SafetyResources} />`} />
           <//>
         <//>
       <//>
