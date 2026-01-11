@@ -140,6 +140,13 @@ export const ListingDetails = () => {
   const amenities = language === 'pl' ? apartment.amenities_pl || apartment.amenities : apartment.amenities;
   const today = new Date().toISOString().split('T')[0];
   
+  // Room Details Logic
+  const roomDetails = apartment.roomDetails || {};
+  const bedroomText = language === 'pl' ? roomDetails.bedroom_pl : roomDetails.bedroom;
+  const bathroomText = language === 'pl' ? roomDetails.bathroom_pl : roomDetails.bathroom;
+  const livingText = language === 'pl' ? roomDetails.living_pl : roomDetails.living;
+  const kidsText = roomDetails.kids ? (language === 'pl' ? roomDetails.kids_pl : roomDetails.kids) : null;
+
   // Calculate hidden images for both views
   const hiddenImagesCountDesktop = Math.max(0, apartment.images.length - 5);
   const hiddenImagesCountMobile = Math.max(0, apartment.images.length - 3);
@@ -190,7 +197,7 @@ export const ListingDetails = () => {
           
           <div className="flex items-center gap-2 text-sm text-booking-action mt-2 font-semibold">
              <a 
-               href="https://maps.app.goo.gl/AdxCwshY1phauhuN6" 
+               href=${apartment.mapLink} 
                target="_blank" 
                rel="noopener noreferrer" 
                className="flex items-center gap-1 hover:text-[#003580] transition-colors group"
@@ -202,30 +209,41 @@ export const ListingDetails = () => {
           </div>
 
           <div className="flex flex-wrap gap-x-6 gap-y-2 mt-4 text-sm text-[#1a1a1a] font-medium border-t border-gray-100 pt-3">
-            <div className="flex items-center gap-2">
-              <svg className="w-5 h-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M5 20h14M4 16h16v4M4 16V12h16v4M6 7h5v5H6V7zm7 0h5v5h-5V7z" />
-              </svg>
-              <span>${t('detail.bedrooms')}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <svg className="w-5 h-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <span>${t('detail.kidsRoom')}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <svg className="w-5 h-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M4 14h16v3a3 3 0 01-3 3H7a3 3 0 01-3-3v-3zM6 14V8a2 2 0 012-2h8a2 2 0 012 2v6" />
-              </svg>
-              <span>${t('detail.bathroom')}</span>
-            </div>
-            <div className="flex items-center gap-2">
-               <svg className="w-5 h-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2m-14 0h2" />
-               </svg>
-              <span>${t('detail.livingRoom')}</span>
-            </div>
+            ${bedroomText && html`
+              <div className="flex items-center gap-2">
+                <svg className="w-5 h-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M5 20h14M4 16h16v4M4 16V12h16v4M6 7h5v5H6V7zm7 0h5v5h-5V7z" />
+                </svg>
+                <span>${bedroomText}</span>
+              </div>
+            `}
+            
+            ${kidsText && html`
+              <div className="flex items-center gap-2">
+                <svg className="w-5 h-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>${kidsText}</span>
+              </div>
+            `}
+
+            ${bathroomText && html`
+              <div className="flex items-center gap-2">
+                <svg className="w-5 h-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M4 14h16v3a3 3 0 01-3 3H7a3 3 0 01-3-3v-3zM6 14V8a2 2 0 012-2h8a2 2 0 012 2v6" />
+                </svg>
+                <span>${bathroomText}</span>
+              </div>
+            `}
+
+            ${livingText && html`
+              <div className="flex items-center gap-2">
+                 <svg className="w-5 h-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2m-14 0h2" />
+                 </svg>
+                <span>${livingText}</span>
+              </div>
+            `}
           </div>
         </div>
 
@@ -290,7 +308,7 @@ export const ListingDetails = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2">
             <h3 className="text-xl font-bold mb-6 text-gray-900">${t('detail.description')}</h3>
-            <p className="text-[#1a1a1a] leading-relaxed mb-10 text-[15px] font-medium opacity-90">${description}</p>
+            <p className="text-[#1a1a1a] leading-relaxed mb-10 text-[15px] font-medium opacity-90 whitespace-pre-line">${description}</p>
             
             ${amenities && amenities.length > 0 && html`
               <h3 className="text-xl font-bold mb-6 text-gray-900">${t('detail.amenities')}</h3>
