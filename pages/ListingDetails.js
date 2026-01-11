@@ -249,58 +249,68 @@ export const ListingDetails = () => {
 
         <div className="grid grid-cols-3 md:grid-cols-4 grid-rows-2 gap-2 h-[250px] md:h-[450px] mb-8 overflow-hidden rounded-lg">
            <div className="col-span-2 row-span-2 relative">
-              <img 
-                src=${apartment.images[0]} 
-                className="w-full h-full object-cover cursor-pointer hover:opacity-95 transition-opacity" 
-                onClick=${() => setActivePhotoIndex(0)}
-              />
+              ${apartment.images[0] && html`
+                <img 
+                  src=${apartment.images[0]} 
+                  className="w-full h-full object-cover cursor-pointer hover:opacity-95 transition-opacity" 
+                  onClick=${() => setActivePhotoIndex(0)}
+                />
+              `}
            </div>
            
            <div className="col-span-1 row-span-1">
-              <img 
-                src=${apartment.images[1] || apartment.images[0]} 
-                className="w-full h-full object-cover cursor-pointer hover:opacity-95 transition-opacity" 
-                onClick=${() => setActivePhotoIndex(1)}
-              />
+              ${apartment.images[1] && html`
+                <img 
+                  src=${apartment.images[1]} 
+                  className="w-full h-full object-cover cursor-pointer hover:opacity-95 transition-opacity" 
+                  onClick=${() => setActivePhotoIndex(1)}
+                />
+              `}
            </div>
 
            <div className="col-span-1 row-span-1 relative">
-              <img 
-                src=${apartment.images[2] || apartment.images[0]} 
-                className="w-full h-full object-cover cursor-pointer hover:opacity-95 transition-opacity" 
-                onClick=${() => setActivePhotoIndex(2)}
-              />
-              ${hiddenImagesCountMobile > 0 && html`
-                <div 
-                  className="absolute inset-0 bg-black/40 flex md:hidden items-center justify-center text-white font-bold text-sm cursor-pointer hover:bg-black/50 transition-colors"
+              ${apartment.images[2] && html`
+                <img 
+                  src=${apartment.images[2]} 
+                  className="w-full h-full object-cover cursor-pointer hover:opacity-95 transition-opacity" 
                   onClick=${() => setActivePhotoIndex(2)}
-                >
-                  +${hiddenImagesCountMobile}
-                </div>
+                />
+                ${hiddenImagesCountMobile > 0 && html`
+                  <div 
+                    className="absolute inset-0 bg-black/40 flex md:hidden items-center justify-center text-white font-bold text-sm cursor-pointer hover:bg-black/50 transition-colors"
+                    onClick=${() => setActivePhotoIndex(2)}
+                  >
+                    +${hiddenImagesCountMobile}
+                  </div>
+                `}
               `}
            </div>
 
            <div className="hidden md:block col-span-1 row-span-1">
-              <img 
-                src=${apartment.images[3] || apartment.images[0]} 
-                className="w-full h-full object-cover cursor-pointer hover:opacity-95 transition-opacity" 
-                onClick=${() => setActivePhotoIndex(3)}
-              />
+              ${apartment.images[3] && html`
+                <img 
+                  src=${apartment.images[3]} 
+                  className="w-full h-full object-cover cursor-pointer hover:opacity-95 transition-opacity" 
+                  onClick=${() => setActivePhotoIndex(3)}
+                />
+              `}
            </div>
 
            <div className="hidden md:block col-span-1 row-span-1 relative">
-              <img 
-                src=${apartment.images[4] || apartment.images[0]} 
-                className="w-full h-full object-cover cursor-pointer hover:opacity-95 transition-opacity" 
-                onClick=${() => setActivePhotoIndex(4)}
-              />
-              ${hiddenImagesCountDesktop > 0 && html`
-                <div 
-                  className="absolute inset-0 bg-black/40 flex items-center justify-center text-white font-bold text-sm cursor-pointer hover:bg-black/50 transition-colors"
+              ${apartment.images[4] && html`
+                <img 
+                  src=${apartment.images[4]} 
+                  className="w-full h-full object-cover cursor-pointer hover:opacity-95 transition-opacity" 
                   onClick=${() => setActivePhotoIndex(4)}
-                >
-                  + ${hiddenImagesCountDesktop} ${t('detail.more')}
-                </div>
+                />
+                ${hiddenImagesCountDesktop > 0 && html`
+                  <div 
+                    className="absolute inset-0 bg-black/40 flex items-center justify-center text-white font-bold text-sm cursor-pointer hover:bg-black/50 transition-colors"
+                    onClick=${() => setActivePhotoIndex(4)}
+                  >
+                    + ${hiddenImagesCountDesktop} ${t('detail.more')}
+                  </div>
+                `}
               `}
            </div>
         </div>
@@ -331,20 +341,23 @@ export const ListingDetails = () => {
               </div>
 
               <div className="space-y-8">
-                ${apartment.reviewsList.slice(0, 3).map(review => html`
-                  <div key=${review.id} className="border-b border-gray-100 pb-8">
-                    <div className="flex items-center gap-3 mb-2">
-                      <div>
-                        <div className="font-bold text-sm text-gray-900">${review.author}</div>
-                        <div className="flex items-center gap-2">
-                           ${renderStars(review.rating)}
-                           <span className="text-[10px] text-gray-400 font-bold uppercase">${review.date}</span>
+                ${apartment.reviewsList.slice(0, 3).map(review => {
+                  const reviewText = language === 'pl' ? review.text_pl || review.text : review.text;
+                  return html`
+                    <div key=${review.id} className="border-b border-gray-100 pb-8">
+                      <div className="flex items-center gap-3 mb-2">
+                        <div>
+                          <div className="font-bold text-sm text-gray-900">${review.author}</div>
+                          <div className="flex items-center gap-2">
+                             ${renderStars(review.rating)}
+                             <span className="text-[10px] text-gray-400 font-bold uppercase">${review.date}</span>
+                          </div>
                         </div>
                       </div>
+                      <p className="text-sm italic text-gray-700 font-medium leading-relaxed mt-2">"${reviewText}"</p>
                     </div>
-                    <p className="text-sm italic text-gray-700 font-medium leading-relaxed mt-2">"${review.text}"</p>
-                  </div>
-                `)}
+                  `;
+                })}
               </div>
             </div>
           </div>

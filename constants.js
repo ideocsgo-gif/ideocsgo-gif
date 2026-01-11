@@ -1,28 +1,6 @@
 
 const API_BASE_URL = 'https://hrdtkk0-production.up.railway.app';
 
-const generateReviews = (count) => {
-  const authors = ['Alice M.', 'John D.', 'Sarah K.', 'Michael B.', 'Elena R.'];
-  const dates = ['January 2026', 'December 2025', 'November 2025', 'October 2025', 'September 2025'];
-  const ratings = [5, 5, 4, 4.8, 4.5]; // Explicit ratings: First two are 5, third is 4
-  const texts = [
-    "Absolutely loved our stay! The location was perfect and the apartment was spotless.",
-    "Great host and beautiful views. Would definitely recommend.",
-    "Very cozy and well equipped. A bit noisy on Saturday night but otherwise perfect.",
-    "The amenities were top notch. Check-in was a breeze.",
-    "Good value for money. Close to public transport."
-  ];
-  
-  return Array.from({ length: count }).map((_, i) => ({
-    id: `rev-${i}`,
-    author: authors[i % authors.length],
-    date: dates[i % dates.length],
-    rating: ratings[i % ratings.length],
-    text: texts[i % texts.length],
-    avatar: `https://i.pravatar.cc/150?u=${i}`
-  }));
-};
-
 export const APARTMENTS = [
   {
     id: '1',
@@ -83,7 +61,35 @@ export const APARTMENTS = [
       kids: 'One Dedicated Children’s Room',
       kids_pl: 'Jeden dedykowany pokój dziecięcy'
     },
-    reviewsList: generateReviews(5)
+    reviewsList: [
+      {
+        id: 'rev-1-1',
+        author: 'Jacek M.',
+        date: 'January 2026',
+        rating: 5,
+        text: 'Very comfortable apartment, clean and well equipped. Quiet location, yet close to everything. Definitely recommend.',
+        text_pl: 'Bardzo komfortowy apartament, czysty i świetnie wyposażony. Lokalizacja spokojna, a jednocześnie blisko wszystkiego. Zdecydowanie polecam.',
+        avatar: 'https://i.pravatar.cc/150?u=1'
+      },
+      {
+        id: 'rev-1-2',
+        author: 'Jakub P.',
+        date: 'December 2025',
+        rating: 5,
+        text: 'Apartment exactly as in the photos, elegant, bright and very well maintained. The stay was really pleasant.',
+        text_pl: 'Apartament dokładnie jak na zdjęciach elegancki, jasny i bardzo zadbany. Pobyt był naprawdę przyjemny.',
+        avatar: 'https://i.pravatar.cc/150?u=2'
+      },
+      {
+        id: 'rev-1-3',
+        author: 'Jan S.',
+        date: 'November 2025',
+        rating: 4,
+        text: 'Great place to stay, comfortable bed and beautiful bathroom. Everything was prepared perfectly.',
+        text_pl: 'Świetne miejsce na pobyt, wygodne łóżko i piękna łazienka. Wszystko było przygotowane perfekcyjnie.',
+        avatar: 'https://i.pravatar.cc/150?u=3'
+      }
+    ]
   },
   {
     id: '2',
@@ -140,7 +146,35 @@ export const APARTMENTS = [
       kids: null,
       kids_pl: null
     },
-    reviewsList: generateReviews(5)
+    reviewsList: [
+      {
+        id: 'rev-2-1',
+        author: 'Weronika B.',
+        date: 'January 2026',
+        rating: 5,
+        text: 'Apartment decorated with great taste. Cleanliness at the highest level, we felt very comfortable.',
+        text_pl: 'Apartament urządzony z dużym smakiem. Czystość na najwyższym poziomie, czuliśmy się bardzo komfortowo.',
+        avatar: 'https://i.pravatar.cc/150?u=4'
+      },
+      {
+        id: 'rev-2-2',
+        author: 'Emilia S.',
+        date: 'December 2025',
+        rating: 5,
+        text: 'Very nice stay, peace and quiet. Kitchen well equipped, we didn\'t miss anything.',
+        text_pl: 'Bardzo miły pobyt, cisza i spokój. Kuchnia dobrze wyposażona, niczego nam nie brakowało',
+        avatar: 'https://i.pravatar.cc/150?u=5'
+      },
+      {
+        id: 'rev-2-3',
+        author: 'Alexandra J.',
+        date: 'November 2025',
+        rating: 4,
+        text: 'Modern and stylish apartment, ideal for both short and long stays. We will gladly return.',
+        text_pl: 'Nowoczesny i stylowy apartament, idealny zarówno na krótki, jak i dłuższy pobyt. Chętnie wrócimy',
+        avatar: 'https://i.pravatar.cc/150?u=6'
+      }
+    ]
   },
   {
     id: '3',
@@ -207,7 +241,35 @@ export const APARTMENTS = [
       kids: null,
       kids_pl: null
     },
-    reviewsList: generateReviews(5)
+    reviewsList: [
+      {
+        id: 'rev-3-1',
+        author: 'Marek G.',
+        date: 'January 2026',
+        rating: 5,
+        text: 'Everything as described. Lots of light, comfortable furniture and great atmosphere. I recommend without hesitation.',
+        text_pl: 'Wszystko zgodnie z opisem. Dużo światła, wygodne meble i świetna atmosfera. Polecam bez wahania',
+        avatar: 'https://i.pravatar.cc/150?u=7'
+      },
+      {
+        id: 'rev-3-2',
+        author: 'Marta S.',
+        date: 'December 2025',
+        rating: 5,
+        text: 'Apartment very spacious and tidy. The bathroom is impressive, and the bed is extremely comfortable.',
+        text_pl: 'Apartament bardzo przestronny i schludny. Łazienka robi duże wrażenie, a łóżko jest niezwykle wygodne.',
+        avatar: 'https://i.pravatar.cc/150?u=8'
+      },
+      {
+        id: 'rev-3-3',
+        author: 'Patryk B.',
+        date: 'November 2025',
+        rating: 4,
+        text: 'Very successful stay, apartment quiet, clean and perfectly furnished. Ideal place to rest.',
+        text_pl: 'Bardzo udany pobyt, apartament cichy, czysty i doskonale urządzony. Idealne miejsce do odpoczynku.',
+        avatar: 'https://i.pravatar.cc/150?u=9'
+      }
+    ]
   },
   {
     id: '4',
@@ -282,6 +344,34 @@ export const APARTMENTS = [
       kids: null,
       kids_pl: null
     },
-    reviewsList: generateReviews(5)
+    reviewsList: [
+      {
+        id: 'rev-4-1',
+        author: 'Aneta S.',
+        date: 'January 2026',
+        rating: 5,
+        text: 'The apartment met all our expectations. Very clean, comfortable and cozy.',
+        text_pl: 'Apartament spełnił wszystkie nasze oczekiwania. Bardzo czysto, komfortowo i przytulnie.',
+        avatar: 'https://i.pravatar.cc/150?u=10'
+      },
+      {
+        id: 'rev-4-2',
+        author: 'Rafal U.',
+        date: 'December 2025',
+        rating: 5,
+        text: 'Beautifully furnished apartment, everything new and well maintained. Definitely worth the price.',
+        text_pl: 'Pięknie urządzony apartament, wszystko nowe i zadbane. Zdecydowanie wart swojej ceny.',
+        avatar: 'https://i.pravatar.cc/150?u=11'
+      },
+      {
+        id: 'rev-4-3',
+        author: 'Jakub F.',
+        date: 'November 2025',
+        rating: 4,
+        text: 'Very pleasant apartment, well maintained and functional. Quiet neighborhood, and the interior is perfect for resting after a whole day. Definitely recommend.',
+        text_pl: 'Bardzo przyjemny apartament, świetnie utrzymany i funkcjonalny. Spokojna okolica, a wnętrze idealne do odpoczynku po całym dniu. Zdecydowanie polecam.',
+        avatar: 'https://i.pravatar.cc/150?u=12'
+      }
+    ]
   }
 ];
