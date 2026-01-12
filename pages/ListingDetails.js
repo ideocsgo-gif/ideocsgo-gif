@@ -8,9 +8,9 @@ import { html } from 'htm/react';
 
 const API_BASE_URL = 'https://hrdtkk0-production.up.railway.app'; 
 
-// Payment Method Icons - Change links here to update icons
+// Payment Method Icons
 const BLIK_ICON_URL = 'https://wbj.pl/cache/images/resize/920-920/5d4c1bab7c328.jpg';
-const BANK_ICON_URL = null; // Set this to a URL string (e.g., 'https://example.com/icon.png') to use an image for Bank Transfer
+const BANK_ICON_URL = null; 
 
 export const ListingDetails = () => {
   const { id } = useParams();
@@ -70,14 +70,12 @@ export const ListingDetails = () => {
       setError(language === 'pl' ? 'Wybierz daty' : 'Please select dates');
       return;
     }
-    // Basic validation
     if (!formData.firstName || !formData.lastName || !formData.email || !formData.phone) {
        setError(language === 'pl' ? 'Wypełnij wszystkie pola' : 'Please fill in all fields');
        return;
     }
 
     setIsChecking(true);
-    // Simulate a check delay
     setTimeout(() => {
       setIsChecking(false);
       setBookingStep('payment');
@@ -90,8 +88,7 @@ export const ListingDetails = () => {
     setError(null);
     
     const title = language === 'pl' ? apartment.title_pl || apartment.title : apartment.title;
-    const paymentLabel = paymentMethod === 'blik' ? 'BLIK' : 'Bank Transfer';
-
+    
     try {
       const response = await fetch(`${API_BASE_URL}/api/book`, {
         method: 'POST',
@@ -100,8 +97,9 @@ export const ListingDetails = () => {
           ...formData,
           apartmentTitle: title,
           paymentMethod: paymentMethod,
-          totalPrice: `PLN ${totalPrice} (${paymentLabel})`,
-          nights: nights || 1
+          totalPrice: `PLN ${totalPrice}`,
+          nights: nights || 1,
+          language: language // Send the language to backend
         }),
       });
       const data = await response.json();
@@ -140,14 +138,12 @@ export const ListingDetails = () => {
   const amenities = language === 'pl' ? apartment.amenities_pl || apartment.amenities : apartment.amenities;
   const today = new Date().toISOString().split('T')[0];
   
-  // Room Details Logic
   const roomDetails = apartment.roomDetails || {};
   const bedroomText = language === 'pl' ? roomDetails.bedroom_pl : roomDetails.bedroom;
   const bathroomText = language === 'pl' ? roomDetails.bathroom_pl : roomDetails.bathroom;
   const livingText = language === 'pl' ? roomDetails.living_pl : roomDetails.living;
   const kidsText = roomDetails.kids ? (language === 'pl' ? roomDetails.kids_pl : roomDetails.kids) : null;
 
-  // Calculate hidden images for both views
   const hiddenImagesCountDesktop = Math.max(0, apartment.images.length - 5);
   const hiddenImagesCountMobile = Math.max(0, apartment.images.length - 3);
 
