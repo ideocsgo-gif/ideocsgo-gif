@@ -74,7 +74,7 @@ export const APARTMENTS = [
       {
         id: 'rev-1-2',
         author: 'Jakub P.',
-        date: 'December 2025',
+        date: 'January 2026',
         rating: 5,
         text: 'Apartment exactly as in the photos, elegant, bright and very well maintained. The stay was really pleasant.',
         text_pl: 'Apartament dokładnie jak na zdjęciach elegancki, jasny i bardzo zadbany. Pobyt był naprawdę przyjemny.',
@@ -83,7 +83,7 @@ export const APARTMENTS = [
       {
         id: 'rev-1-3',
         author: 'Jan S.',
-        date: 'November 2025',
+        date: 'January 2026',
         rating: 4,
         text: 'Great place to stay, comfortable bed and beautiful bathroom. Everything was prepared perfectly.',
         text_pl: 'Świetne miejsce na pobyt, wygodne łóżko i piękna łazienka. Wszystko było przygotowane perfekcyjnie.',
@@ -159,7 +159,7 @@ export const APARTMENTS = [
       {
         id: 'rev-2-2',
         author: 'Emilia S.',
-        date: 'December 2025',
+        date: 'January 2026',
         rating: 5,
         text: 'Very nice stay, peace and quiet. Kitchen well equipped, we didn\'t miss anything.',
         text_pl: 'Bardzo miły pobyt, cisza i spokój. Kuchnia dobrze wyposażona, niczego nam nie brakowało',
@@ -168,7 +168,7 @@ export const APARTMENTS = [
       {
         id: 'rev-2-3',
         author: 'Alexandra J.',
-        date: 'November 2025',
+        date: 'January 2026',
         rating: 4,
         text: 'Modern and stylish apartment, ideal for both short and long stays. We will gladly return.',
         text_pl: 'Nowoczesny i stylowy apartament, idealny zarówno na krótki, jak i dłuższy pobyt. Chętnie wrócimy',
@@ -254,7 +254,7 @@ export const APARTMENTS = [
       {
         id: 'rev-3-2',
         author: 'Marta S.',
-        date: 'December 2025',
+        date: 'January 2026',
         rating: 5,
         text: 'Apartment very spacious and tidy. The bathroom is impressive, and the bed is extremely comfortable.',
         text_pl: 'Apartament bardzo przestronny i schludny. Łazienka robi duże wrażenie, a łóżko jest niezwykle wygodne.',
@@ -263,7 +263,7 @@ export const APARTMENTS = [
       {
         id: 'rev-3-3',
         author: 'Patryk B.',
-        date: 'November 2025',
+        date: 'January 2026',
         rating: 4,
         text: 'Very successful stay, apartment quiet, clean and perfectly furnished. Ideal place to rest.',
         text_pl: 'Bardzo udany pobyt, apartament cichy, czysty i doskonale urządzony. Idealne miejsce do odpoczynku.',
@@ -357,7 +357,7 @@ export const APARTMENTS = [
       {
         id: 'rev-4-2',
         author: 'Rafal U.',
-        date: 'December 2025',
+        date: 'January 2026',
         rating: 5,
         text: 'Beautifully furnished apartment, everything new and well maintained. Definitely worth the price.',
         text_pl: 'Pięknie urządzony apartament, wszystko nowe i zadbane. Zdecydowanie wart swojej ceny.',
@@ -366,7 +366,7 @@ export const APARTMENTS = [
       {
         id: 'rev-4-3',
         author: 'Jakub F.',
-        date: 'November 2025',
+        date: 'January 2026',
         rating: 4,
         text: 'Very pleasant apartment, well maintained and functional. Quiet neighborhood, and the interior is perfect for resting after a whole day. Definitely recommend.',
         text_pl: 'Bardzo przyjemny apartament, świetnie utrzymany i funkcjonalny. Spokojna okolica, a wnętrze idealne do odpoczynku po całym dniu. Zdecydowanie polecam.',
