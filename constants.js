@@ -45,8 +45,7 @@ export const APARTMENTS = [
       './images/1/2.jpg',
       './images/1/3.jpg',
       './images/1/4.jpg',
-      './images/1/5.jpg',
-      './images/1/6.jpg'
+      './images/1/5.jpg'
     ],
     beds: 2,
     baths: 1,
@@ -130,8 +129,7 @@ export const APARTMENTS = [
       './images/2/2.jpg',
       './images/2/3.jpg',
       './images/2/4.jpg',
-      './images/2/5.jpg',
-      './images/2/6.jpg'
+      './images/2/5.jpg'
     ],
     beds: 1,
     baths: 1,
@@ -225,8 +223,7 @@ export const APARTMENTS = [
       './images/3/2.jpg',
       './images/3/3.jpg',
       './images/3/4.jpg',
-      './images/3/5.jpg',
-      './images/3/6.jpg'
+      './images/3/5.jpg'
     ],
     beds: 2,
     baths: 1,
@@ -328,8 +325,7 @@ export const APARTMENTS = [
       './images/4/2.jpg',
       './images/4/3.jpg',
       './images/4/4.jpg',
-      './images/4/5.jpg',
-      './images/4/6.jpg'
+      './images/4/5.jpg'
     ],
     beds: 1,
     baths: 1,

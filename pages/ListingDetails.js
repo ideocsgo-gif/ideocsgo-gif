@@ -254,18 +254,18 @@ export const ListingDetails = () => {
               `}
            </div>
            
-           <div className="col-span-1 row-span-1">
-              ${apartment.images[1] && html`
+           ${apartment.images[1] && html`
+            <div className="col-span-1 row-span-1">
                 <img 
                   src=${apartment.images[1]} 
                   className="w-full h-full object-cover cursor-pointer hover:opacity-95 transition-opacity" 
                   onClick=${() => setActivePhotoIndex(1)}
                 />
-              `}
-           </div>
+            </div>
+           `}
 
-           <div className="col-span-1 row-span-1 relative">
-              ${apartment.images[2] && html`
+           ${apartment.images[2] && html`
+            <div className="col-span-1 row-span-1 relative">
                 <img 
                   src=${apartment.images[2]} 
                   className="w-full h-full object-cover cursor-pointer hover:opacity-95 transition-opacity" 
@@ -279,21 +279,21 @@ export const ListingDetails = () => {
                     +${hiddenImagesCountMobile}
                   </div>
                 `}
-              `}
-           </div>
+            </div>
+           `}
 
-           <div className="hidden md:block col-span-1 row-span-1">
-              ${apartment.images[3] && html`
+           ${apartment.images[3] && html`
+            <div className="hidden md:block col-span-1 row-span-1">
                 <img 
                   src=${apartment.images[3]} 
                   className="w-full h-full object-cover cursor-pointer hover:opacity-95 transition-opacity" 
                   onClick=${() => setActivePhotoIndex(3)}
                 />
-              `}
-           </div>
+            </div>
+           `}
 
-           <div className="hidden md:block col-span-1 row-span-1 relative">
-              ${apartment.images[4] && html`
+           ${apartment.images[4] && html`
+             <div className="hidden md:block col-span-1 row-span-1 relative">
                 <img 
                   src=${apartment.images[4]} 
                   className="w-full h-full object-cover cursor-pointer hover:opacity-95 transition-opacity" 
@@ -307,8 +307,8 @@ export const ListingDetails = () => {
                     + ${hiddenImagesCountDesktop} ${t('detail.more')}
                   </div>
                 `}
-              `}
-           </div>
+             </div>
+           `}
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
