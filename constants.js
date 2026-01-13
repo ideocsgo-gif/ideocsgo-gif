@@ -45,7 +45,8 @@ export const APARTMENTS = [
       './images/1/2.jpg',
       './images/1/3.jpg',
       './images/1/4.jpg',
-      './images/1/5.jpg'
+      './images/1/5.jpg',
+      './images/1/6.jpg'
     ],
     beds: 2,
     baths: 1,
